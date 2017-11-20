@@ -2,12 +2,13 @@
 <html>
 <head>
 	<title>Register Yourself</title>
+	<%include stat%>
 </head>
 <body>
 	<% if (message.length > 0) { %>
             <h1><%= message %></h1>
             <% } %>
-	<form>
+	<form action="/signup" method="post">
 		<input type="text" name="username" placeholder="Enter a username"/>
 		<br/>
 		<input type="password" name="password">

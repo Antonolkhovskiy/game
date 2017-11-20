@@ -2,18 +2,77 @@
 <html>
 <head>
 	<title></title>
+	<%include stat%>
 </head>
 <body>
 
-	<form action="/submitquestion">
-		<input type="text" name="" placeholder="Question">
+	<form id="subquest">
+		<input type="text" placeholder="Question" id="question">
 		<br/>
-		<input type="text" placeholder="Correct Answer">
-		<input type="text" placeholder="Wrong Answer">		
-		<input type="text" placeholder="Wrong Answer">
-		<input type="text" placeholder="Wrong Answer">
+		<input type="text" placeholder="Give a Hint" id="hint">
+		<br/>
+		<input type="text" placeholder="Correct Answer" id="corans">
+		<input type="text" placeholder="Wrong Answer" id="ans1">		
+		<input type="text" placeholder="Wrong Answer" id="ans2">
+		<input type="text" placeholder="Wrong Answer" id="ans3">
 		<input type="submit" value="Submit Question">
 	</form>
+
+	<form id="start_game" action="/start_game">
+		<input type="submit" value="Start Game">
+	</form>
+
+	<h1 id="status"></h1>
+
+	 <script>
+	 	function get_ready(){
+	 		$('#status').text("question was saved");
+					$('#question').val("");
+        			$('#corans').val("");
+					$('#ans1').val("");
+					$('#ans2').val("");
+					$('#ans3').val("");
+					$('#hint').val("");
+	 	 	
+	 	};
+        $('#subquest').submit(function(event){
+        	event.preventDefault();
+			event.stopPropagation();
+
+        	var question = $('#question').val();
+        	var corans = $('#corans').val();
+			var ans1 = $('#ans1').val();
+			var ans2 = $('#ans2').val();
+			var ans3 = $('#ans3').val();
+			var hint = $('#hint').val();
+
+			$.ajax({
+				type:"POST",
+				url:"/subquest",
+				contentType: "application/JSON",
+				data: JSON.stringify({data:{
+					'question':question,
+					'corans':corans,
+					'ans1':ans1,
+					'ans2':ans2,
+					'ans3':ans3,
+					'hint':hint
+					}
+				}),
+				success: get_ready(),
+
+				}).done(function(result){
+					console.log(result);					
+				}).fail(function(err){
+					console.log(err);
+					$('#status').text("question was not saved please try again");
+				});
+        });
+        
+    
+
+	 </script>
+       
 
 
 

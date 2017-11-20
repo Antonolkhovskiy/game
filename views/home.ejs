@@ -2,21 +2,32 @@
 <html>
 <head>
 	<title></title>
+	<%include stat%>
 </head>
 <body>
 
 	<h1>GOOOOD!!!</h1>
 	<% if (typeof username !== 'undefined' && username.length > 0) { %>
-  <h1>Welcome <%= username %></h1>
+  		<h1>
+  			Welcome <%= username %>
+  		</h1>
 	<% } %>
 
-	<form>
-		<input type="submit" value="Join a game"/>
+	<form action="/join_game">
+		<input type="text" id="room" placeholder="Type Game's Name "/>
+		<input type="submit" id="room_start" value="Join a game"/>
 	</form>
 	<form action="/creategame" method="get">
 		<input type="submit" value="Create a game">
 	</form>
-
+</>
+	<script>
+			var socket = io();
+			$('#room_start').click(function(){
+				var room = $('#room').val();
+					socket.emit('join_room', {'room': room});
+			});
+	</script>
 
 </body>
 </html>

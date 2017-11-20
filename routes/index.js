@@ -1,6 +1,24 @@
 var express = require('express');
 var router = express.Router();
 var lastID = null;
+var game = require('../game.js');
+var Type = require('type-of-is');
+var inc_game_id = game.inc_game_id;
+var get_game_id = game.get_game_id;
+
+
+
+var mongoose = require('mongoose');
+var mongoosePromise = global.Promise;
+var question = require('../models/quest');
+
+
+
+
+
+
+
+
 
 
 
@@ -58,14 +76,172 @@ module.exports = function (passport) {
         res.redirect('/');
     });
 
-    router.get('/creategame', function(req, res){
+   router.get('/creategame', isAuthenticated, function(req, res){
+        inc_game_id();
+        var game_id = get_game_id();
+        console.log(req.user.username + "    usernameradfadsfasdfadsfs")
+        console.log(game_id + "  asdfasdfasfaseffsaefas");
+
         res.render('questgame');
     });
 
-    router.post('/submitquestion', function(req, res){
-        console.log("question is submited")
-    })
+   router.get('/join_game', isAuthenticated, function(req, res){
+        res.render('gamepage');
+   })
 
+
+ 
+
+/*var Schema = mongoose.Schema;
+var questSchema = new Schema({
+                    'game_id':String,
+                    'question':String,
+                    'corans':String,
+                    'ans1':String,
+                    'ans2':String,
+                    'ans3':String,
+                    'hint':String
+});
+
+var question = mongoose.model('question', questSchema);
+*/
+
+
+
+
+
+
+    router.post('/subquest', isAuthenticated, function(req, res){
+        if(req.body.data){
+            console.log("question is submited by " + req.user.username);
+            var id = req.user.username;
+            id.toString();
+            console.log(id + "asdasfadsfadsfadsfadsfaewfasfaewfaefadsfadsf");
+            var data = req.body.data;
+            console.log(data);
+            data.game_id = id;
+
+            var quest = new question(data);
+            console.log(data);
+            quest.save(function(err){
+            if(err) return console.log(err);
+            console.log("saved--->>>>" + quest);
+        });
+        }else{
+            console.log('Did not worked');
+        
+        }
+            
+    });
+
+    router.get('/start_game', isAuthenticated, function(req, res){
+        var game_id_got;
+
+        if(req.user.username){
+
+            game_id_got = req.user.username;
+            game_id_got.toString();
+
+            module.exports.id = game_id_got;
+            res.render('gamepage');
+        }else{
+            console.log("didnt work");
+        }
+    })
+ /*  
+    router.get('/start_game', isAuthenticated, function(req, res){
+        
+       
+        var game_id_got;
+        var size;
+
+        if(req.user.username){
+
+            game_id_got = req.user.username;
+            game_id_got.toString();
+
+
+            question.find({})
+            .where('game_id', game_id_got)
+            .sort({'_id':-1})
+            .limit(1)
+            .exec()
+            .then((data_get) =>{
+               
+                console.log("--------------------------worked---------------------");
+                console.log(data_get);
+            res.render('gamepage', {
+            question: '1: ' + data_get[0].question,
+            corans: data_get[0].corans,
+            ans1: data_get[0].ans1,
+            ans2: data_get[0].ans2,
+            ans3: data_get[0].ans3,
+          hint: data_get[0].hint
+            });  
+
+            })
+            .catch((err) => {
+                console.log("adsfadsfasdfadsfdsfadsfasdfasfhklbasdjkvasdkfjvaskfvaskjfvaskdjf");
+                console.log(err);
+            });
+
+
+            
+        }else{
+            console.log('start game error');
+        }
+
+   });
+
+
+   router.post('/next_quest', function(req, res){
+
+        if(req.body.data){
+            var data = (req.body.data);
+            console.log("data " + data);
+            var game_id = data.game_id;
+            var quest_num = data.quest_num;
+            console.log("quest_num---->>> " + quest_num + " game_id---->>>> " + game_id);
+
+            question.find({})
+            .where('game_id', game_id)
+            .sort({'_id':-1})
+            .skip(quest_num)
+            .limit(1)
+            .exec()
+            .then((data_get) =>{
+               
+                console.log("--------------------------asdfasdfasdf---------------------");
+                console.log(data_get);
+                quest_num++;
+            res.render('gamepage', {
+            question: quest_num + ': ' + data_get[0].question,
+            corans: data_get[0].corans,
+            ans1: data_get[0].ans1,
+            ans2: data_get[0].ans2,
+            ans3: data_get[0].ans3,
+            hint: data_get[0].hint
+            });  
+
+            })
+            .catch((err) => {
+                console.log("adsfadsfasdfadsfdsfadsfasdfasfhklbasdjkvasdkfjvaskfvaskjfvaskdjf");
+                console.log(err);
+            });
+ 
+
+        }else{
+            console.log("did not worked");
+        }
+
+
+
+
+
+
+
+    });
+*/
 
     return router;
 }
