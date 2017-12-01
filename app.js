@@ -17,7 +17,7 @@ var Type = require('type-of-is');
 
 
 
-mongoose.connect(config.db_url);
+mongoose.connect(config.MONGODB_URI);
 
 
 var question = require('./models/quest');
