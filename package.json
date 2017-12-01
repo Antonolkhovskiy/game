@@ -19,7 +19,6 @@
     "heroku",
     "express"
   ],
-
   "author": "group_5",
   "license": "ISC",
   "dependencies": {

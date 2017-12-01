@@ -2,9 +2,9 @@ var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
 var config = require('./config')
-var bodyParser = require('body-Parser');
-var cookieParser = require('cookie-Parser');
-var expressSession = require('express-Session');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var expressSession = require('express-session');
 var passport = require('passport');
 var routes = require('./routes/index')(passport);
 var flash = require('connect-flash');
@@ -16,8 +16,8 @@ var mongoosePromise = global.Promise;
 var Type = require('type-of-is');
 
 
-
-mongoose.connect(config.db_url);
+process.env.MONGODB_URI = config.MONGODB_URI;
+mongoose.connect(process.env.MONGODB_URI);
 
 
 var question = require('./models/quest');
