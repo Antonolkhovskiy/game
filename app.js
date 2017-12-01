@@ -16,8 +16,8 @@ var mongoosePromise = global.Promise;
 var Type = require('type-of-is');
 
 
-
-mongoose.connect(config.MONGODB_URI);
+process.env.MONGODB_URI = config.MONGODB_URI;
+mongoose.connect(process.env.MONGODB_URI);
 
 
 var question = require('./models/quest');
