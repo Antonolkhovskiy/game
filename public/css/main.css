@@ -1,95 +1,106 @@
 
 body {
-    padding-top: 54px;
+	background: #92bde7;
+    color: #485e74;
+    line-height: 1.6;
+    font-family: 'Segoe Ui', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 1em;
 }
 
-@media (min-width: 992px) {
-    body {
-        padding-top: 56px;
-    }
+*{
+	box-sizing: border-box;
 }
 
-header.justHeader {
-    background: url("images/bg-img.png") no-repeat center center scroll;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
+.container{
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
 }
 
-header.justHeader > .overlay {
-    padding: 5rem 0;
+ul{
+    list-style: none;
+    padding: 0;
+}
+
+.wrapper{
+    box-shadow: 0 0 20px 0 rgba(72,94,116,0.7);
+}
+
+.wrapper > *{
+    padding: 1em;
+}
+
+.welcoming{
+    background: #c9e6ff;
+}
+
+.welcoming h1{
     text-align: center;
-    background: rgba(0, 0, 0, 0.6);
+    margin: 0 0 1rem 0;
 }
 
-@media (min-width: 992px) {
-    header.justHeader > .overlay {
-        padding: 10rem 0;
-    }
+.mainpart{
+	background: #f9feff;
 }
- 
 
-.register
-{
-    padding: 2em 0;
-}    
-	.widget
-	{
-		padding: 25px;
-		margin-right: 25px;
-		width: calc(66.6666% - 25px);
-		border: none;
-		background: #fff;
+/* FORM STYLES */
+
+.mainpart form{
+    display: grid;
+    grid-template-columns: 1fr;
+	grid-gap: 20px;
+	padding: 3px 3px 3px 3px;
+}
+
+.mainpart form label{
+    display: block;
+}
+
+.mainpart form p,
+.mainpart p{
+	margin: 0;
+	text-align: center
+}
+
+.mainpart form .full{
+    grid-column: 1/3;
+}
+
+.mainpart form button, 
+.mainpart form  input,
+.mainpart form textarea,
+.mainpart p input{
+    width: 100%;
+    padding:1em;
+    border: 1px solid #c9e6ff;
+}
+
+.mainpart form button{ 
+	display: table;
+	margin: 0 auto;
+    border: 0;
+    text-transform: uppercase;
+}
+
+
+
+/* LARGE SCREENS */
+
+@media(min-width:700px){
+    .wrapper{
+        display: grid;
+        grid-template-columns: 1fr 2fr;
     }
-    .tabs li
-		{
-			
-			    display: inline-block;
-			    border-bottom: 1px solid transparent;
-			    padding: 0 17.5px 7.5px;
-			    margin-bottom: -10px;
-			    cursor: pointer;
-        } 
-     .tabs .active
-		{
-			    border-bottom: 2px solid #f30;
-		}
-	.tabs :not(.active):hover
-			{
-				border-bottom: 2px solid rgba(#f30, 0.3);	
-			}
-			
-		
-		.widget .hr
-		{
-			margin-top: -8px;
-			border-width: 2px;
-		}
-		.widget .h4
-		{
-			margin: 5px 12.5px 25px;
-		}
+
+    .wrapper > * {
+        padding: 2em;
+    }
+
+    .mainpart h1{
+        text-align: left;
+	}
 	
-    .register	.none-float .form-group
-	{
-		float: none;
-	}
-	.register .fb-btn
-	{
-		margin-left: 10px;
-	}
+}
 
 
-	
-
-	.btn-success, #startgamebutton{
-		display: table;
-		margin: 0 auto;
-	}
-
-	.beacon1, .beacon2, .beacon3{
-		border: 1px solid grey;
-		border-radius: 10px;
-		padding: 5px 15px 5px 5px;
-	}

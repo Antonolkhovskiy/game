@@ -8,37 +8,51 @@
 
 	<!--newOne-->
 	<div class="container">
-			
-					 <div class="row">
-						
-						<div class="col-md-4">
-						<div class="beacon1">
+		<div class="wrapper animated bounceInLeft">
+			<div class="welcoming">
+					<h1>Adjusting Beacons</h1>
+					<h1 id="status"></h1>
+				</div>
+					<div class="mainpart">
 						 <form id="subquest">
-						 <div class="form-group">
-						 <h1 class="beaconTitle">Beacon #1</h1><br />
-						 <label for="questionInput">Question:</label><br />
-						 <textarea class="form-control" id="question"></textarea><br />
-						 <label for="trueAnswer">True Answer:</label><br />
-						 <input type="text" id="corans" class="form-control" /><br />
-						 <label for="falseAnswers">False Answers:</label><br />
-						 <input type="text" id="ans1" class="form-control" /><br />
-						 <input type="text" id="ans2" class="form-control" /><br />
-						 <input type="text" id="ans3" class="form-control" /><br />
-						 <label for="hint">Hint:</label><br />
-						 <input type="text"  class="form-control" id="hint"/><br />
-						 <button type="submit" class="btn btn-success">Save</button><br />
-						 </div>
+						 <h1>Beacon #1</h1><br />
+						 <p>
+						 <label for="questionInput">Question:</label>
+						 <textarea class="form-control" id="question"></textarea>
+						</p>
+						<p>
+						 <label for="trueAnswer">True Answer:</label>
+						 <input type="text" id="corans" class="form-control" />
+						</p>
+						<p>
+						 <label for="falseAnswers">False Answers:</label>
+						</p>
+						<p>
+						 <input type="text" id="ans1" placeholder="1st False Answer" class="form-control" />
+						</p>
+						<p>
+						 <input type="text" id="ans2" placeholder="2nd False Answer" class="form-control" />
+						</p>
+						<p>
+						 <input type="text" id="ans3" placeholder="3rd False Answer" class="form-control" />
+						</p>
+						<p>
+						 <label for="hint">Hint:</label>
+						</p>
+						<p>
+						 <input type="text"  class="form-control" id="hint"/>
+						</p>
+						<p>
+						 <button type="submit" class="btn btn-success">Save</button>
+						</p>
 						</form>
 						<form action="/start_game">
-							<button type="submit" id="startgamebutton" class="btn btn-danger" id="start_game">Start Game</button><br />
+							<p>
+							<button type="submit" class="btn btn-danger" id="start_game">Start Game</button>
+							</p>	
 						</form>
-					 </div>
-					 </div>
-					 
 					</div>
-					<br />
-					
-					<h1 id="status"></h1><br />
+					</div>
 				</div>
 
 	 <script>

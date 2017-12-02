@@ -2,9 +2,7 @@
 <html>
 <head>
 	<title>Welcome</title>
-	<meta charset="utf-8"/>
 	
-
 	<%include stat%>
 </head>
 <body>
@@ -15,28 +13,37 @@
 	<% } %>
 	<br/>
 	<!--newOne-->
-	<form class="none-float" action="/login" method="post">
-			<div class="col-md-6 form-group">
+	<div class="container">
+		<div class="wrapper animated bounceInLeft">
+			<div class="welcoming">
+				<h1>Hello there! Are you ready for an exciting journey?</h1>
+			</div>
+	<div class="mainpart">		
+	<form action="/login" method="post">
+			
+				<p>
 				<label>Username</label>
 				<input type="text" name="username" class="form-control" />
-			</div>
-			<div class="col-md-6 form-group">
+				</p>	
+			
+				<p>	
 				<label>Password</label>
-				<input type="password" name="password" class="form-control" />
-			</div>
-			<div class="col-md-6">
-				<button type="submit" class="btn theme-btn">Go Play</button>
+				<input type="password" name="password" class="form-control" /><br />
+				<button type="submit" class="btn theme-btn">Go Play</button><br /><br />
 				<button type="submit" class="btn fb-btn">Login with Facebook</button>
-			</div>
+				</p>
 		</form>
 
 		<br />
 
 		<form  action="/signup">
-			<div class="col-md-6">
+			<p>
 			<button type="submit" class="btn theme-btn">Register</button>
-			</div>
+			</p>
 		</form>
+	</div>
+			</div>
+		</div>
 
 </body>
 </html>

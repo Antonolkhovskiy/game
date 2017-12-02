@@ -6,13 +6,30 @@
 </head>
 <body>
 
-
-		<h1 id="header"></h1>
-
-	<input type="submit" id="corans">
-	<input type="submit" class="ans" id="ans1">
-	<input type="submit" class="ans" id="ans2">
-	<input type="submit" class="ans" id="ans3">		
+<div class="container">
+	<div class="wrapper animated bounceInLeft">
+		<div class="welcoming">
+			<h1 id="header"></h1>
+		</div>
+		<div class="mainpart">
+			<p>
+				<input type="submit" class="btn theme-btn" id="corans"/>
+			</p>
+			<br />
+			<p>
+				<input type="submit" class="ans btn theme-btn " id="ans1"/>
+			</p>
+			<br />
+			<p>	
+				<input type="submit" class="ans btn theme-btn" id="ans2"/>
+			</p>
+			<br />
+			<p>	
+				<input type="submit" class="ans btn theme-btn" id="ans3"/>	
+			</p>
+		</div>
+	</div>
+</div>	
 	<script>
 	var socket = io();
 	socket.emit('start_game', {'quest_num': 1 });
