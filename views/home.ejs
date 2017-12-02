@@ -14,11 +14,12 @@
 	<% } %>
 
 	<form action="/join_game">
-		<input type="text" id="room" placeholder="Type Game's Name "/>
-		<input type="submit" id="room_start" value="Join a game"/>
+		<input style="width:200px;" type="text" id="room" class="form-control" placeholder="Type Game's Name "/><br />
+		<button type="submit" class="btn btn-danger" id="room_start">Join a Game</button><br />
 	</form>
+	<br />
 	<form action="/creategame" method="get">
-		<input type="submit" value="Create a game">
+		<button type="submit" class="btn btn-warning">Create a Game</button>
 	</form>
 </>
 	<script>

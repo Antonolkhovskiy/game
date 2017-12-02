@@ -1,0 +1,95 @@
+
+body {
+    padding-top: 54px;
+}
+
+@media (min-width: 992px) {
+    body {
+        padding-top: 56px;
+    }
+}
+
+header.justHeader {
+    background: url("images/bg-img.png") no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+header.justHeader > .overlay {
+    padding: 5rem 0;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 992px) {
+    header.justHeader > .overlay {
+        padding: 10rem 0;
+    }
+}
+ 
+
+.register
+{
+    padding: 2em 0;
+}    
+	.widget
+	{
+		padding: 25px;
+		margin-right: 25px;
+		width: calc(66.6666% - 25px);
+		border: none;
+		background: #fff;
+    }
+    .tabs li
+		{
+			
+			    display: inline-block;
+			    border-bottom: 1px solid transparent;
+			    padding: 0 17.5px 7.5px;
+			    margin-bottom: -10px;
+			    cursor: pointer;
+        } 
+     .tabs .active
+		{
+			    border-bottom: 2px solid #f30;
+		}
+	.tabs :not(.active):hover
+			{
+				border-bottom: 2px solid rgba(#f30, 0.3);	
+			}
+			
+		
+		.widget .hr
+		{
+			margin-top: -8px;
+			border-width: 2px;
+		}
+		.widget .h4
+		{
+			margin: 5px 12.5px 25px;
+		}
+	
+    .register	.none-float .form-group
+	{
+		float: none;
+	}
+	.register .fb-btn
+	{
+		margin-left: 10px;
+	}
+
+
+	
+
+	.btn-success, #startgamebutton{
+		display: table;
+		margin: 0 auto;
+	}
+
+	.beacon1, .beacon2, .beacon3{
+		border: 1px solid grey;
+		border-radius: 10px;
+		padding: 5px 15px 5px 5px;
+	}

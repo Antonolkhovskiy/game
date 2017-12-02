@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  
   "repository": {
     "type": "git",
     "url": "https://github.com/Antonolkhovskiy/game.git"
@@ -33,6 +32,7 @@
     "favicon": "0.0.2",
     "mongoose": "^4.13.0",
     "morgan": "^1.9.0",
+    "nodemon": "^1.12.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "promise": "^8.0.1",

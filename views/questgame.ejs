@@ -6,23 +6,40 @@
 </head>
 <body>
 
-	<form id="subquest">
-		<input type="text" placeholder="Question" id="question">
-		<br/>
-		<input type="text" placeholder="Give a Hint" id="hint">
-		<br/>
-		<input type="text" placeholder="Correct Answer" id="corans">
-		<input type="text" placeholder="Wrong Answer" id="ans1">		
-		<input type="text" placeholder="Wrong Answer" id="ans2">
-		<input type="text" placeholder="Wrong Answer" id="ans3">
-		<input type="submit" value="Submit Question">
-	</form>
-
-	<form id="start_game" action="/start_game">
-		<input type="submit" value="Start Game">
-	</form>
-
-	<h1 id="status"></h1>
+	<!--newOne-->
+	<div class="container">
+			
+					 <div class="row">
+						
+						<div class="col-md-4">
+						<div class="beacon1">
+						 <form id="subquest">
+						 <div class="form-group">
+						 <h1 class="beaconTitle">Beacon #1</h1><br />
+						 <label for="questionInput">Question:</label><br />
+						 <textarea class="form-control" id="question"></textarea><br />
+						 <label for="trueAnswer">True Answer:</label><br />
+						 <input type="text" id="corans" class="form-control" /><br />
+						 <label for="falseAnswers">False Answers:</label><br />
+						 <input type="text" id="ans1" class="form-control" /><br />
+						 <input type="text" id="ans2" class="form-control" /><br />
+						 <input type="text" id="ans3" class="form-control" /><br />
+						 <label for="hint">Hint:</label><br />
+						 <input type="text"  class="form-control" id="hint"/><br />
+						 <button type="submit" class="btn btn-success">Save</button><br />
+						 </div>
+						</form>
+						<form action="/start_game">
+							<button type="submit" id="startgamebutton" class="btn btn-danger" id="start_game">Start Game</button><br />
+						</form>
+					 </div>
+					 </div>
+					 
+					</div>
+					<br />
+					
+					<h1 id="status"></h1><br />
+				</div>
 
 	 <script>
 	 	function get_ready(){
@@ -72,7 +89,11 @@
     
 
 	 </script>
-       
+       <!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/popper/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
 
 
 
