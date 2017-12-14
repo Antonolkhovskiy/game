@@ -12,14 +12,29 @@
 	<input type="submit" id="corans">
 	<input type="submit" class="ans" id="ans1">
 	<input type="submit" class="ans" id="ans2">
-	<input type="submit" class="ans" id="ans3">		
+	<input type="submit" class="ans" id="ans3">	
+<br>
+<form action="/leave">
+	<input type="submit" id="leave" value="leave the room">	
+</form>
+<br>
+<input type="submit" id="knp" value="test">	
+
+
 	<script>
+	var quest = sessionStorage.getItem("quest");
+	console.log(quest + "  ?????????????");
+	if (quest === null){ 
+		quest = 1;
+		}else{
+		quest.toInt;
+		}
 	var socket = io();
-	socket.emit('start_game', {'quest_num': 1 });
+	socket.emit('start_game', {'quest_num': quest });
 
 	socket.on('quest', function(data, num){
-		console.log("data reseived "  + data);
-		console.log("num reseived "  + num);
+		console.log("data received "  + data);
+		console.log("num received "  + num);
 		get_ready(data, num);
 	});
 
@@ -30,6 +45,8 @@
 	
 		 data = JSON.parse(result);
 		 quest_num = JSON.stringify(num);
+		 sessionStorage.clear();
+		 sessionStorage.setItem("quest", quest_num);
 		 room = data.game_id;
 
 			$('#header').text('Question ' + quest_num + ": " + data.question);
@@ -41,7 +58,7 @@
 
 
 	$('.ans').click(function() {
-		alert("Whrong! Try Again!");
+		alert("Wrong! Try Again!");
 		
 	});
 
@@ -51,6 +68,15 @@
 
         socket.emit('next_quest', {'room': room, 'quest_num': quest_num});
 	});
+
+
+	$('#leave').click(function(event){
+		console.log('leaving');
+		socket.emit('leave', {'room': 'qwe'});
+	});
+
+
+
 
 	/*$('#corans').click(function(){
 		$.ajax({

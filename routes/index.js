@@ -38,7 +38,7 @@ module.exports = function (passport) {
     /* GET login page. */
     router.get('/', function (req, res) {
         // Display the Login page with any flash message, if any
-        console.log('index get /');
+       // console.log('index get /');
        res.render('index', {message: req.flash('message')});
 
 
@@ -79,8 +79,8 @@ module.exports = function (passport) {
    router.get('/creategame', isAuthenticated, function(req, res){
         inc_game_id();
         var game_id = get_game_id();
-        console.log(req.user.username + "    usernameradfadsfasdfadsfs")
-        console.log(game_id + "  asdfasdfasfaseffsaefas");
+      //  console.log(req.user.username + "    usernameradfadsfasdfadsfs")
+       // console.log(game_id + "  asdfasdfasfaseffsaefas");
 
         res.render('questgame');
     });
@@ -90,39 +90,18 @@ module.exports = function (passport) {
    })
 
 
- 
-
-/*var Schema = mongoose.Schema;
-var questSchema = new Schema({
-                    'game_id':String,
-                    'question':String,
-                    'corans':String,
-                    'ans1':String,
-                    'ans2':String,
-                    'ans3':String,
-                    'hint':String
-});
-
-var question = mongoose.model('question', questSchema);
-*/
-
-
-
-
-
-
     router.post('/subquest', isAuthenticated, function(req, res){
         if(req.body.data){
-            console.log("question is submited by " + req.user.username);
+           // console.log("question is submited by " + req.user.username);
             var id = req.user.username;
             id.toString();
-            console.log(id + "asdasfadsfadsfadsfadsfaewfasfaewfaefadsfadsf");
+          //  console.log(id + "asdasfadsfadsfadsfadsfaewfasfaewfaefadsfadsf");
             var data = req.body.data;
-            console.log(data);
+           // console.log(data);
             data.game_id = id;
 
             var quest = new question(data);
-            console.log(data);
+           // console.log(data);
             quest.save(function(err){
             if(err) return console.log(err);
             console.log("saved--->>>>" + quest);
@@ -143,11 +122,16 @@ var question = mongoose.model('question', questSchema);
             game_id_got.toString();
 
             module.exports.id = game_id_got;
-            res.render('gamepage');
+            console.log(game_id_got + '   game_id_got')
+            res.render('start_game_page', {username: game_id_got});
         }else{
             console.log("didnt work");
         }
-    })
+    });
+
+    router.get('/leave', isAuthenticated, function(req, res){
+        res.render('home');
+    });
  /*  
     router.get('/start_game', isAuthenticated, function(req, res){
         

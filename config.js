@@ -1,4 +1,4 @@
 module.exports ={
-	'port': process.env.PORT || 3000,
-	'MONGODB_URI': 'mongodb://localhost/game' || 'mongodb://dovik:seproject@ds127126.mlab.com:27126/game'
+	'port': 3000,
+	'db_url':'mongodb://localhost/game'
 };

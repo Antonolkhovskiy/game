@@ -6,5 +6,98 @@
 </head>
 <body>
 
+	<% if (typeof username !== 'undefined' && username.length > 0) { %>
+		<!-- change the saying -->
+  		<h1 class="to_hide">
+  			Tell to the players name of the game 
+  			'<font id="username"><%= username %></font>' to connect
+  		</h1>
+	<% } %>
+	<ul id="list">
+	</ul>
+	<ul id="team1" class="team">Team 1
+	</ul>
+	<ul id="team2" class="team">Team 2
+	</ul>
+	<ul id="team3" class="team">Team 3
+	</ul>
+	<br>
+
+
+	<h3 id="player_count"></h3>
+	<input type="submit" id="test" value="test">
+	<input type="submit" id="team" class="to_hide" value="team">
+
+
+	<script>
+	var socket = io();
+	var player_count = 0;
+
+	$('.team').hide();
+	$('#player_count').text(player_count);
+
+	var username = $('#username').text();
+
+	socket.emit('show_players', {'game': username});
+
+	socket.emit('join_room',{'room':username});
+	socket.emit('show_room', {'1':1});
+	$('#test').click(function(e){
+		socket.emit('show_room', {'1':1});
+	});
+
+
+	socket.on('player_conn', function (data) {
+
+		$('#list').append('<li>' + data.username + '</li>');
+		player_count++;
+		$('#player_count').text(player_count);
+	});
+
+	socket.on('get_players', function(data){
+
+		var players = Object.values(data);
+	
+		for(i in players){
+		$('#list').append('<li>' + players[i] + '</li>');
+		player_count++;
+		$('#player_count').text(player_count);
+		};
+	});
+
+	$('#team').click(function(e){
+		socket.emit('teams', {'game': username});
+	});
+
+	socket.on('get_teams', function(data){
+		var team1 = data.team1;
+		var team2 = data.team2;
+		var team3 = data.team3;
+
+		console.log(team1 + "  " + team2 + "  " + team3);
+
+		$('#list').hide();
+		$('.to_hide').hide();
+		$('#player_count').hide();
+		$('.team').show();
+
+		for(var i = 0; i < team1.length; i++){
+			$('#team1').append('<li>' + team1[i] + '</li>');
+		};
+		for(var i = 0; i < team2.length; i++){
+			$('#team2').append('<li>' + team2[i] + '</li>');
+		};
+
+		for(var i = 0; i < team3.length; i++){
+			$('#team3').append('<li>' + team3[i] + '</li>');
+		};
+
+
+	});
+
+
+	</script>
+
+
 </body>
 </html>

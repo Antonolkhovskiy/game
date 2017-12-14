@@ -6,19 +6,19 @@
 
 
 	<% if (typeof corans !== 'undefined' && corans.length > 0) { %>
-		<button type="submit" class="btn theme-btn" id="corans"><%= corans%></button>
+		<input type="submit" id="corans" value="<%= corans%>">
 	<% } %>
 
 	<% if (typeof ans1 !== 'undefined' && ans1.length > 0) { %>
-		<button type="submit" class="ans btn theme-btn" id="ans1"><%= ans1 %></button>
+		<input type="submit" class="ans" value="<%= ans1 %>" id="ans1">
 	<% } %>
 
 	<% if (typeof ans2 !== 'undefined' && ans2.length > 0) { %>
-		<button type="submit" class="ans btn theme-btn"  id="ans2"><%= ans2 %></button>
+		<input type="submit" class="ans" value="<%= ans2 %>" id="ans2">
 	<% } %>
 
 	<% if (typeof ans3 !== 'undefined' && ans3.length > 0) { %>
-		<button type="submit" class="ans btn theme-btn" id="ans2"><%= ans3 %></button>
+		<input type="submit" class="ans" value="<%= ans3 %>" id="ans2">
 	<% } %>
 <br>
 <% if (typeof hint !== 'undefined' && hint.length > 0) { %> 
