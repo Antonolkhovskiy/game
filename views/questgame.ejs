@@ -11,6 +11,10 @@
 		<div class="wrapper animated bounceInLeft">
 			<div class="welcoming">
 					<h1>Adjusting Beacons</h1>
+					<h3>You Have To Submit At Leat 3 Questions To Start The Game</h3>
+					<hr>
+					<h3 id="header"></h3>
+					<hr>
 					<h1 id="status"></h1>
 				</div>
 					<div class="mainpart">
@@ -48,61 +52,104 @@
 						</form>
 						<form action="/start_game">
 							<p>
-							<button type="submit" class="btn btn-danger" id="start_game">Start Game</button>
+							<button type="submit" class="start_game btn btn-danger">Start Game</button>
+							</p>	
+						</form>
+						<form action="/home">
+							<p>
+						 	<button type="submit" class="btn btn-warning">Menu</button>
 							</p>	
 						</form>
 					</div>
 					</div>
 				</div>
 
-	 <script>
-	 	function get_ready(){
-	 		$('#status').text("question was saved");
-					$('#question').val("");
-        			$('#corans').val("");
-					$('#ans1').val("");
-					$('#ans2').val("");
-					$('#ans3').val("");
-					$('#hint').val("");
-	 	 	
-	 	};
-        $('#subquest').submit(function(event){
-        	event.preventDefault();
-			event.stopPropagation();
+				<script>
 
-        	var question = $('#question').val();
-        	var corans = $('#corans').val();
-			var ans1 = $('#ans1').val();
-			var ans2 = $('#ans2').val();
-			var ans3 = $('#ans3').val();
-			var hint = $('#hint').val();
+var username = sessionStorage.getItem('username');
+var socket = io();
+$('.start_game').hide();
 
-			$.ajax({
-				type:"POST",
-				url:"/subquest",
-				contentType: "application/JSON",
-				data: JSON.stringify({data:{
-					'question':question,
-					'corans':corans,
-					'ans1':ans1,
-					'ans2':ans2,
-					'ans3':ans3,
-					'hint':hint
-					}
-				}),
-				success: get_ready(),
+if(username != null){
+	socket.emit('quest_count', {'game': username});
+	console.log(username);
+}else{
+	console.log(username);
+}
 
-				}).done(function(result){
-					console.log(result);					
-				}).fail(function(err){
-					console.log(err);
-					$('#status').text("question was not saved please try again");
-				});
-        });
-        
-    
 
-	 </script>
+socket.on('quest_comlete', function(data){
+		var quest_count = data.quest_count;
+		quest_count.toInt;
+		console.log(quest_count);
+		if (quest_count >= 3){
+			$('.start_game').show();
+			$('#header').text('Questions Submited: ' + quest_count);
+			clearInterval(timer);
+		}else{
+			$('#header').text('Questions Submited: ' + quest_count);
+			
+		}
+});
+
+function quest_num(){
+	socket.emit('quest_count', {'game': username});
+}
+
+var timer = setInterval(quest_num,3000);
+
+
+
+
+
+function get_ready(){
+	$('#status').text("question was saved");
+		   $('#question').val("");
+		   $('#corans').val("");
+		   $('#ans1').val("");
+		   $('#ans2').val("");
+		   $('#ans3').val("");
+		   $('#hint').val("");
+	 
+};
+$('#subquest').submit(function(event){
+   event.preventDefault();
+   event.stopPropagation();
+
+   var question = $('#question').val();
+   var corans = $('#corans').val();
+   var ans1 = $('#ans1').val();
+   var ans2 = $('#ans2').val();
+   var ans3 = $('#ans3').val();
+   var hint = $('#hint').val();
+
+   $.ajax({
+	   type:"POST",
+	   url:"/subquest",
+	   contentType: "application/JSON",
+	   data: JSON.stringify({data:{
+		   'question':question,
+		   'corans':corans,
+		   'ans1':ans1,
+		   'ans2':ans2,
+		   'ans3':ans3,
+		   'hint':hint
+		   }
+	   }),
+	   success: get_ready(),
+
+	   }).done(function(result){
+		   console.log(result);
+		   socket.emit('quest_count', {'game': username});					
+	   }).fail(function(err){
+		   console.log(err);
+		   $('#status').text("question was not saved please try again");
+	   });
+});
+
+
+
+</script>
        <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/popper/popper.min.js"></script>

@@ -6,5 +6,262 @@
 </head>
 <body>
 
+		<% if (typeof username !== 'undefined' && username.length > 0) { %>
+			<!-- change the saying -->
+			  <h1 class="to_hide" id="head">
+				  Tell to the players name of the game 
+				  '<font id="username"><%= username %></font>' to connect
+			  </h1>
+		<% } %>
+		<ul id="list">
+		</ul>
+		<h3 class=team team_head" id="quest_status1"></h3>
+		<ul id="team1" class="team">Team 1
+		</ul>
+		<h3 class=team team_head" id="quest_status2"></h3>
+		<ul id="team2" class="team">Team 2
+		</ul>
+		<h3 class=team team_head" id="quest_status3"></h3>	
+		<ul id="team3" class="team">Team 3
+		</ul>
+		<br>
+	
+	
+		<h3 id="player_count"></h3>
+		<input type="submit" id="game_start" value="Start Game">
+	
+		<form action="/home">
+			<input type="submit" id="menu"  value="Menu">
+		</form>
+	
+	
+		<script>
+		var socket = io();
+		var player_count = 0;
+	
+		$('.team').hide();
+		$('#player_count').text('Connected players: ' + player_count + '   You need at least 3 players to start the game');
+		$('#game_start').hide();
+	
+		var username = $('#username').text();
+
+		
+	
+		var team1_quest = 1;
+		var team2_quest = 1;	
+		var team3_quest = 1;
+	
+	
+		socket.emit('show_players', {'game': username});
+	
+	
+	
+		socket.emit('join_room',{'room':username});
+	
+	
+	
+	/*	socket.emit('show_room', {'1':1});
+		$('#test').click(function(e){
+			socket.emit('show_room', {'1':1});
+		});
+	
+	
+		socket.on('player_conn', function (data) {
+	
+			$('#list').append('<li>' + data.username + '</li>');
+			player_count++;
+			$('#player_count').text(player_count);
+		});
+	
+		socket.on('get_players', function(data){
+	
+			console.log('get players');
+	
+			var players = Object.values(data);
+		
+			for(i in players){
+			$('#list').append('<li>' + players[i] + '</li>');
+			player_count++;
+			$('#player_count').text(player_count);
+			};
+		});*/
+	/*
+		$('#team').click(function(e){
+			socket.emit('teams', {'game': username});
+		});
+	
+		socket.on('get_teams', function(data){
+			var team1 = data.team1;
+			var team2 = data.team2;
+			var team3 = data.team3;
+	
+			console.log(team1 + "  " + team2 + "  " + team3);
+	
+			$('#list').hide();
+			$('.to_hide').hide();
+			$('#player_count').hide();
+			$('.team').show();
+	
+			for(var i = 0; i < team1.length; i++){
+				$('#team1').append('<li>' + team1[i].player_name + '</li>');
+			};
+			for(var i = 0; i < team2.length; i++){
+				$('#team2').append('<li>' + team2[i].player_name + '</li>');
+			};
+	
+			for(var i = 0; i < team3.length; i++){
+				$('#team3').append('<li>' + team3[i].player_name + '</li>');
+			};
+	
+	
+		});*/
+	
+	
+		socket.on('get_team_number', function(data){
+			console.log('get_team_number');
+			var team_to_join = username + teams();
+			console.log(team_to_join + "  teams to join");
+			var player_name = data.player_name;
+			var data_to_join = {
+				'team': team_to_join,
+				'player_name': player_name,
+				'room': username
+			}
+	
+			socket.emit('get_join_team', data_to_join);
+		});
+	
+		socket.on('team_status', function(data){
+			console.log(data.team + '  answered');
+			var team = data.team.toString();
+			switch(team){
+				case 'team1':{
+					team1_quest++;
+					$('#quest_status1').text('They are on question ' + team1_quest + ' ');
+					if(team1_quest >=3){
+						var winner_data = {
+							'game_id': username,
+							'winner_team': 'team1'
+						}
+						socket.emit('end_game', winner_data);
+						end_game('Team 1');
+						break;
+					}
+	
+				}
+				case 'team2':{
+					team2_quest++;
+					$('#quest_status2').text('They are on question ' + team2_quest + ' ');
+					if(team2_quest >=3){
+						var winner_data = {
+							'game_id': username,
+							'winner_team': 'team2'
+						}
+						socket.emit('end_game', winner_data);
+						end_game('Team 2');
+						break;
+					}
+	
+				}
+				case 'team3':{
+					team3_quest++;
+					$('#quest_status3').text('They are on question ' + team3_quest + ' ');
+					if(team3_quest >= 3){
+						var winner_data = {
+							'game_id': username,
+							'winner_team': 'team3'
+						}
+						socket.emit('end_game', winner_data);
+						end_game('Team3');
+						break;
+					}
+	
+				}
+			}
+		})
+	
+		socket.on('new_player', function(data){
+			player_count++;
+			$('#player_count').text('Connected players: ' + player_count + '   You need at least 3 players to start the game');
+			allow_start_game(player_count);
+			console.log('new_player\n total number of players: ' + player_count);
+			//$('.team').show();
+			var player = data.player_name;
+			var team = data.team.toString();
+			var team_modified = team.substring(team.length - 5);
+			switch(team_modified){
+				case "team1":{
+					$('#team1').append('<li>' + player + '</li>');
+					break;
+				}
+				case "team2":{
+					$('#team2').append('<li>' + player + '</li>');
+					break;
+				}
+				case "team3":{
+					$('#team3').append('<li>' + player + '</li>');
+					break;
+				}
+			}
+		});
+	
+		function end_game(winner_team){
+			$('.team_head').text();
+			$('.team').hide();
+			$('#player_count').hide();
+			$('#game_start').hide();
+			$('#head').text(winner_team + ' won the game');
+		}
+	
+		function allow_start_game(player_count){
+			if(player_count >= 3){
+				$('#game_start').show();
+			}
+		}
+	
+		$('#game_start').click(function(){
+			$('.team').show();
+			$('#player_count').hide();
+			$('#game_start').hide();
+	
+			socket.emit('starting_game', {'room': username});
+		});
+	
+	
+		function teams(){
+			console.log(" function teams ");
+			var teams = sessionStorage.getItem("teams");
+			console.log(teams + " teams");
+			if(teams === null){
+				console.log(' teams is null');
+	
+				sessionStorage.clear();
+				sessionStorage.setItem('teams', '0');
+				return "team1";
+			}else{
+				if(teams == 0){
+					console.log(' team1 is choosen');
+					sessionStorage.clear();
+					sessionStorage.setItem('teams', '1');
+					return "team2";
+				} else if(teams == 1){
+					console.log(' team1 is choosen');
+	
+					sessionStorage.clear();
+					sessionStorage.setItem('teams', '2');
+					return "team3";
+				}else{
+						console.log(' team1 is choosen');
+	
+					sessionStorage.clear();
+					sessionStorage.setItem('teams', '0');
+					return "team1";
+				}
+			}
+		}
+	
+		</script>
+	
+
 </body>
 </html>

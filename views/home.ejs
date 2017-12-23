@@ -10,7 +10,7 @@
 			<div class="welcoming">
 					<% if (typeof username !== 'undefined' && username.length > 0) { %>
 				<h1>
-					Welcome <%= username %>
+					Welcome <font id="username"><%= username %></font>
 				</h1>
 					<% } %>
 			</div>
@@ -21,25 +21,51 @@
 		<p>
 		<label>Type Game's Name</label>
 		<input type="text" id="room" class="form-control"/><br />
-		<button type="submit" class="btn btn-danger" id="room_start">Join a Game</button><br />
+		<button type="submit"  id="join_game" class="btn btn-danger">Join a Game</button><br />
 		</p>
 	</form>
 	<br />
 	<form action="/creategame" method="get">
 		<p>
-		<button type="submit" class="btn btn-warning">Create a Game</button>
+		<button type="submit" id="crt_game" class="btn btn-warning">Create a Game</button>
 		</p>
 	</form>
 	</div>
 	</div>
 </div>
 </>
-	<script>
+<script>			
 			var socket = io();
-			$('#room_start').click(function(){
+			var username; 
+			/*	$('#room_start').click(function(){
 				var room = $('#room').val();
 					socket.emit('join_room', {'room': room});
+					username = $('#username').text();
+					socket.emit(room,{'username': username});
+			});*/
+
+			$('#crt_game').click(function(){
+				//var room = $('#room').val();
+				var room = $('#username').text();
+				socket.emit('join_room', {'room': room, 'username': username});
+				username = $('#username').text();
+				sessionStorage.setItem('username', username);
 			});
+
+			
+			$('#join_game').click(function(event){
+				console.log("clicked join game");
+				var room_join = $('#room').val();
+				username = $('#username').text();
+				socket.emit('join_user', {'room': room_join, 'username': username});
+				//socket.emit('get_team', {'room': room_join, 'player_name': username});
+
+				sessionStorage.setItem('username', username);
+				sessionStorage.setItem('room', room_join);
+			});
+
+
+
 	</script>
 
 </body>
