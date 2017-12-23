@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Welcome</title>
-	
+	<meta charset="utf-8"/>
 	<%include stat%>
 </head>
 <body>
@@ -12,38 +12,18 @@
   <h1><%= message %></h1>
 	<% } %>
 	<br/>
-	<!--newOne-->
-	<div class="container">
-		<div class="wrapper animated bounceInLeft">
-			<div class="welcoming">
-				<h1>Hello there! Are you ready for an exciting journey?</h1>
-			</div>
-	<div class="mainpart">		
 	<form action="/login" method="post">
-			
-				<p>
-				<label>Username</label>
-				<input type="text" name="username" class="form-control" />
-				</p>	
-			
-				<p>	
-				<label>Password</label>
-				<input type="password" name="password" class="form-control" /><br />
-				<button type="submit" class="btn theme-btn">Go Play</button><br /><br />
-				<button type="submit" class="btn fb-btn">Login with Facebook</button>
-				</p>
-		</form>
-
-		<br />
-
-		<form  action="/signup">
-			<p>
-			<button type="submit" class="btn theme-btn">Register</button>
-			</p>
-		</form>
-	</div>
-			</div>
-		</div>
+		<input type="text" name="username" placeholder="Enter a username"/>
+		<br/>
+		<input type="password" name="password"/>
+		<br/>
+		<input type="submit" name="submit" value="Go Play"/>
+	</form>
+	<br/>
+	<form action="/signup">		
+		<input type="submit" name="reg" value="Register"/>
+	</form>
+	
 
 </body>
 </html>

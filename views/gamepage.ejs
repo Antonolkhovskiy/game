@@ -6,37 +6,42 @@
 </head>
 <body>
 
-<div class="container">
-	<div class="wrapper animated bounceInLeft">
-		<div class="welcoming">
-			<h1 id="header"></h1>
-		</div>
-		<div class="mainpart">
-			<p>
-				<input type="submit" class="btn theme-btn" id="corans"/>
-			</p>
-			<br />
-			<p>
-				<input type="submit" class="ans btn theme-btn " id="ans1"/>
-			</p>
-			<br />
-			<p>	
-				<input type="submit" class="ans btn theme-btn" id="ans2"/>
-			</p>
-			<br />
-			<p>	
-				<input type="submit" class="ans btn theme-btn" id="ans3"/>	
-			</p>
-		</div>
-	</div>
-</div>	
+
+		<h1 id="header"></h1>
+
+	<input type="submit" class="wait_event" id="corans">
+	<input type="submit" class="ans wait_event" id="ans1">
+	<input type="submit" class="ans wait_event" id="ans2">
+	<input type="submit" class="ans wait_event" id="ans3">	
+<br>
+<form action="/home">
+	<input type="submit" id="leave" value="Menu">	
+</form>
+
+
 	<script>
+
+	$('.wait_event').hide();
+	$('#header').text('Please Wait For Other Players');
+	var quest = sessionStorage.getItem("quest");
+	console.log(quest + "  ?????????????");
+
 	var socket = io();
-	socket.emit('start_game', {'quest_num': 1 });
+	var team;
+
+	socket.on('go_to_team', function(data){
+		console.log('go to team');
+		team = data.team;
+		socket.emit('join_room', {'room': team});
+		socket.emit('join_room', {'room': room});
+	});
+
+
+
 
 	socket.on('quest', function(data, num){
-		console.log("data reseived "  + data);
-		console.log("num reseived "  + num);
+		console.log("data received "  + data);
+		console.log("num received "  + num);
 		get_ready(data, num);
 	});
 
@@ -47,6 +52,8 @@
 	
 		 data = JSON.parse(result);
 		 quest_num = JSON.stringify(num);
+		 sessionStorage.clear();
+		 sessionStorage.setItem("quest", quest_num);
 		 room = data.game_id;
 
 			$('#header').text('Question ' + quest_num + ": " + data.question);
@@ -56,9 +63,42 @@
 			$('#ans3').val(data.ans3);
 	}
 
+	socket.on('game_over', function(data){
+		$('.wait_event').hide();
+		$('#header').text('You Loosed The Game ' + data.winner_team + " Won");
+	})
+
+	socket.on('game_started', function(data){
+		$('.wait_event').show();
+		if (quest === null){ 
+				quest = 1;
+				socket.emit('start_game', {'quest_num': quest, 'team': team });
+				}else{
+				quest.toInt;
+				}
+	});
+
+	socket.on('game_won', function(data){
+		$('.wait_event').hide();
+		$('#header').text('Congratulations! You Won The Game!');
+	})
+
+
+	// getting teams
+
+	var room = sessionStorage.getItem('room');
+	var player = sessionStorage.getItem('username');
+
+	var data_to_join = {
+		'room': room,
+		'player_name': player
+	}
+	console.log(data_to_join.room + '  data to join');
+	socket.emit('get_team', data_to_join);
+
 
 	$('.ans').click(function() {
-		alert("Whrong! Try Again!");
+		alert("Wrong! Try Again!");
 		
 	});
 
@@ -66,26 +106,17 @@
 		event.preventDefault();
         event.stopPropagation();
 
-        socket.emit('next_quest', {'room': room, 'quest_num': quest_num});
+        socket.emit('next_quest', {'room': room, 'quest_num': quest_num, 'team': team});
 	});
 
-	/*$('#corans').click(function(){
-		$.ajax({
-				type:"POST",
-				url:"/next_quest",
-				contentType: "application/JSON",
-				data: JSON.stringify({data:{
-					'quest_num': ,
-					'game_id': ''
-					}
-				}),
 
-				}).done(function(result){
-					console.log(result);					
-				}).fail(function(err){
-					console.log(err);
-				});
-        });*/
+	$('#leave').click(function(event){
+		console.log('leaving');
+		socket.emit('leave', {'room': 'qwe'});
+	});
+
+
+
 
 	
 	</script>

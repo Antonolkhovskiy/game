@@ -1,35 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Registration</title>
+	<title>Register Yourself</title>
 	<%include stat%>
 </head>
 <body>
-	<div class="container">
-		<div class="wrapper animated bounceInLeft">
-			<div class="welcoming">
 	<% if (message.length > 0) { %>
             <h1><%= message %></h1>
-			<% } %>
-			<h1>Registration</h1>
-		</div>
-			<div class="mainpart">
-			<form  action="/signup" method="post">
-				<p>
-					<label>Enter a Username</label>
-					<input type="text" name="username" class="form-control" />
-				</p>
-				<p>
-					<label>Password</label>
-					<input type="password" name="password" class="form-control" />
-				
-					<br />
-
-					<button type="submit" class="btn theme-btn">Register</button>
-				</p>
-			</form>
-			</div>
-		</div>
-	</div>
+            <% } %>
+	<form action="/signup" method="post">
+		<input type="text" name="username" placeholder="Enter a username"/>
+		<br/>
+		<input type="password" name="password">
+		<br/>
+		<input type="submit" name="submit" >
+	</form>
+	
 </body>
 </html>

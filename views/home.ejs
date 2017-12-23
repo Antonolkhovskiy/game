@@ -5,41 +5,53 @@
 	<%include stat%>
 </head>
 <body>
-	<div class="container">
-		 <div class="wrapper animated bounceInLeft">
-			<div class="welcoming">
-					<% if (typeof username !== 'undefined' && username.length > 0) { %>
-				<h1>
-					Welcome <%= username %>
-				</h1>
-					<% } %>
-			</div>
 
-		<div class="mainpart">
-			 
+	<% if (typeof username !== 'undefined' && username.length > 0) { %>
+  		<h1>
+  			Welcome <font id="username"><%= username %></font>
+  		</h1>
+	<% } %>
+
 	<form action="/join_game">
-		<p>
-		<label>Type Game's Name</label>
-		<input type="text" id="room" class="form-control"/><br />
-		<button type="submit" class="btn btn-danger" id="room_start">Join a Game</button><br />
-		</p>
+		<input type="text" id="room" placeholder="Type Game's Name "/>
+		<input type="submit" id="join_game" value="Join a game"/>
 	</form>
-	<br />
 	<form action="/creategame" method="get">
-		<p>
-		<button type="submit" class="btn btn-warning">Create a Game</button>
-		</p>
+		<input type="submit" id="crt_game" value="Create a game">
 	</form>
-	</div>
-	</div>
-</div>
-</>
-	<script>
+
+
+	<script>			
 			var socket = io();
-			$('#room_start').click(function(){
+			var username; 
+/*			$('#room_start').click(function(){
 				var room = $('#room').val();
 					socket.emit('join_room', {'room': room});
+					username = $('#username').text();
+					socket.emit(room,{'username': username});
+			});*/
+
+			$('#crt_game').click(function(){
+				//var room = $('#room').val();
+				var room = $('#username').text();
+				socket.emit('join_room', {'room': room, 'username': username});
+				username = $('#username').text();
+				sessionStorage.setItem('username', username);
 			});
+
+			
+			$('#join_game').click(function(event){
+				var room_join = $('#room').val();
+				username = $('#username').text();
+				socket.emit('join_user', {'room': room_join, 'username': username});
+				//socket.emit('get_team', {'room': room_join, 'player_name': username});
+
+				sessionStorage.setItem('username', username);
+				sessionStorage.setItem('room', room_join);
+			});
+
+
+
 	</script>
 
 </body>

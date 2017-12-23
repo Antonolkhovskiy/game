@@ -6,56 +6,71 @@
 </head>
 <body>
 
-	<!--newOne-->
-	<div class="container">
-		<div class="wrapper animated bounceInLeft">
-			<div class="welcoming">
-					<h1>Adjusting Beacons</h1>
-					<h1 id="status"></h1>
-				</div>
-					<div class="mainpart">
-						 <form id="subquest">
-						 <h1>Beacon #1</h1><br />
-						 <p>
-						 <label for="questionInput">Question:</label>
-						 <textarea class="form-control" id="question"></textarea>
-						</p>
-						<p>
-						 <label for="trueAnswer">True Answer:</label>
-						 <input type="text" id="corans" class="form-control" />
-						</p>
-						<p>
-						 <label for="falseAnswers">False Answers:</label>
-						</p>
-						<p>
-						 <input type="text" id="ans1" placeholder="1st False Answer" class="form-control" />
-						</p>
-						<p>
-						 <input type="text" id="ans2" placeholder="2nd False Answer" class="form-control" />
-						</p>
-						<p>
-						 <input type="text" id="ans3" placeholder="3rd False Answer" class="form-control" />
-						</p>
-						<p>
-						 <label for="hint">Hint:</label>
-						</p>
-						<p>
-						 <input type="text"  class="form-control" id="hint"/>
-						</p>
-						<p>
-						 <button type="submit" class="btn btn-success">Save</button>
-						</p>
-						</form>
-						<form action="/start_game">
-							<p>
-							<button type="submit" class="btn btn-danger" id="start_game">Start Game</button>
-							</p>	
-						</form>
-					</div>
-					</div>
-				</div>
+	<h3>You Have To Submit At Leat 3 Questions To Start The Game</h3>
+	<h3 id="header"></h3>
+
+	<form id="subquest">
+		<input type="text" placeholder="Question" id="question">
+		<br/>
+		<input type="text" placeholder="Give a Hint" id="hint">
+		<br/>
+		<input type="text" placeholder="Correct Answer" id="corans">
+		<input type="text" placeholder="Wrong Answer" id="ans1">		
+		<input type="text" placeholder="Wrong Answer" id="ans2">
+		<input type="text" placeholder="Wrong Answer" id="ans3">
+		<input type="submit" value="Submit Question">
+	</form>
+
+	<form class="start_game" action="/start_game">
+		<input type="submit" class="start_game" value="Start Game">
+	</form>
+
+	<form action="/home">
+		<input type="submit" value="Menu">
+	</form>
+
+
+
+	<h1 id="status"></h1>
 
 	 <script>
+
+	 	var username = sessionStorage.getItem('username');
+	 	var socket = io();
+	 	$('.start_game').hide();
+
+	 	if(username != null){
+	 		socket.emit('quest_count', {'game': username});
+	 		console.log(username);
+	 	}else{
+	 		console.log(username);
+	 	}
+
+
+	 	socket.on('quest_comlete', function(data){
+	 			var quest_count = data.quest_count;
+	 			quest_count.toInt;
+	 			console.log(quest_count);
+	 			if (quest_count >= 3){
+	 				$('.start_game').show();
+	 				$('#header').text('Questions Submited: ' + quest_count);
+	 				clearInterval(timer);
+	 			}else{
+	 				$('#header').text('Questions Submited: ' + quest_count);
+	 				
+	 			}
+	 	});
+
+	 	function quest_num(){
+	 		socket.emit('quest_count', {'game': username});
+	 	}
+
+	 	var timer = setInterval(quest_num, 3000);
+
+	 	
+
+	 	
+
 	 	function get_ready(){
 	 		$('#status').text("question was saved");
 					$('#question').val("");
@@ -93,7 +108,8 @@
 				success: get_ready(),
 
 				}).done(function(result){
-					console.log(result);					
+					console.log(result);
+					socket.emit('quest_count', {'game': username});					
 				}).fail(function(err){
 					console.log(err);
 					$('#status').text("question was not saved please try again");
@@ -103,11 +119,7 @@
     
 
 	 </script>
-       <!-- Bootstrap core JavaScript -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/popper/popper.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
+       
 
 
 
