@@ -8,39 +8,50 @@
 
 		<% if (typeof username !== 'undefined' && username.length > 0) { %>
 			<!-- change the saying -->
+			<div class="startgamecontent">
 			  <h1 class="to_hide" id="head">
-				  Tell to the players name of the game 
-				  '<font id="username"><%= username %></font>' to connect
+				  Connect to the game with name: 
+				  '<font id="username"><%= username %></font>'
 			  </h1>
 		<% } %>
-		<ul id="list">
-		</ul>
-		<h3 class=team team_head" id="quest_status1"></h3>
-		<ul id="team1" class="team">Team 1
-		</ul>
-		<h3 class=team team_head" id="quest_status2"></h3>
-		<ul id="team2" class="team">Team 2
-		</ul>
-		<h3 class=team team_head" id="quest_status3"></h3>	
-		<ul id="team3" class="team">Team 3
-		</ul>
+		<div class="teamone">
+			<h3 class="team team_head" id="quest_status1"></h3>
+			<ul id="team1" class="team">TEAM 1
+			</ul>
+		</div>
+		<div class="teamtwo">
+			<h3 class="team team_head" id="quest_status2"></h3>
+			<ul id="team2" class="team">TEAM 2
+			</ul>
+		</div>
+		<div class="teamthree">
+			<h3 class="team team_head" id="quest_status3"></h3>	
+			<ul id="team3" class="team">TEAM 3
+			</ul>
+		</div>
 		<br>
 	
-	
-		<h3 id="player_count"></h3>
-		<input type="submit" id="game_start" value="Start Game">
+		<h3 id="atleast">You need at least 3 players to start the game</h3>
+		<span id="countname"><h3 id="player_count"></h3></span>
+		
+		
+		<button id="game_start" class="btn btn-danger">Start Game</button>
+			
+		
 	
 		<form action="/home">
-			<input type="submit" id="menu"  value="Menu">
+			<p>
+				<button id="menu">HomePage</button>
+			</p>
 		</form>
-	
+	    </div>
 	
 		<script>
 		var socket = io();
 		var player_count = 0;
 	
 		$('.team').hide();
-		$('#player_count').text('Connected players: ' + player_count + '   You need at least 3 players to start the game');
+		$('#player_count').text('Connected players: ' + player_count);
 		$('#game_start').hide();
 	
 		var username = $('#username').text();
@@ -51,70 +62,11 @@
 		var team2_quest = 1;	
 		var team3_quest = 1;
 	
-	
-		socket.emit('show_players', {'game': username});
-	
+
 	
 	
 		socket.emit('join_room',{'room':username});
 	
-	
-	
-	/*	socket.emit('show_room', {'1':1});
-		$('#test').click(function(e){
-			socket.emit('show_room', {'1':1});
-		});
-	
-	
-		socket.on('player_conn', function (data) {
-	
-			$('#list').append('<li>' + data.username + '</li>');
-			player_count++;
-			$('#player_count').text(player_count);
-		});
-	
-		socket.on('get_players', function(data){
-	
-			console.log('get players');
-	
-			var players = Object.values(data);
-		
-			for(i in players){
-			$('#list').append('<li>' + players[i] + '</li>');
-			player_count++;
-			$('#player_count').text(player_count);
-			};
-		});*/
-	/*
-		$('#team').click(function(e){
-			socket.emit('teams', {'game': username});
-		});
-	
-		socket.on('get_teams', function(data){
-			var team1 = data.team1;
-			var team2 = data.team2;
-			var team3 = data.team3;
-	
-			console.log(team1 + "  " + team2 + "  " + team3);
-	
-			$('#list').hide();
-			$('.to_hide').hide();
-			$('#player_count').hide();
-			$('.team').show();
-	
-			for(var i = 0; i < team1.length; i++){
-				$('#team1').append('<li>' + team1[i].player_name + '</li>');
-			};
-			for(var i = 0; i < team2.length; i++){
-				$('#team2').append('<li>' + team2[i].player_name + '</li>');
-			};
-	
-			for(var i = 0; i < team3.length; i++){
-				$('#team3').append('<li>' + team3[i].player_name + '</li>');
-			};
-	
-	
-		});*/
 	
 	
 		socket.on('get_team_number', function(data){
@@ -182,7 +134,7 @@
 	
 		socket.on('new_player', function(data){
 			player_count++;
-			$('#player_count').text('Connected players: ' + player_count + '   You need at least 3 players to start the game');
+			$('#player_count').text('Connected players: ' + player_count);
 			allow_start_game(player_count);
 			console.log('new_player\n total number of players: ' + player_count);
 			//$('.team').show();
@@ -223,6 +175,7 @@
 			$('.team').show();
 			$('#player_count').hide();
 			$('#game_start').hide();
+			$('#atleast').hide();
 	
 			socket.emit('starting_game', {'room': username});
 		});

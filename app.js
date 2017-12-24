@@ -284,48 +284,6 @@ io.on('connection', function(socket){
     });
 
 
-
-    io.on('connection', function(socket){
-        socket.on('show_players', function(data){
-                var game_id = data.game;
-                game_id.toString;
-                game.find({})
-                    .where({'game': game_id})
-                    .populate('player')
-                    .then((data_get) =>{    
-                        console.log(data_get + "'''''''''''''''''''''''''''''''''");
-                       
-
-                        var players_data = data_get[0].players;
-                        var massive = [];
-                        var temp;
-                        var players = [];
-
-                        for(var i = 0; i < players_data.length; i++){
-                            players.push(players_data[i].player_name);
-                        }
-
-
-                      
-                    console.log("----------------" + players + "----------------");
-                            //var players = data_get[0].players.player_name;
-                            console.log(players + '   players');
-                            socket.join(game_id);
-                            io.to(game_id).emit('get_players', players);
-                    })
-                    .catch((err) =>{
-                        console.log(err);
-                    });
-        });
-
-    });
-
-
-
-
-
-
-
     io.on('connection', function(socket){
         socket.on('leave', function(data){
             var room = data.room;
