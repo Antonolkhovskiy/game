@@ -10,6 +10,7 @@
 	<div class="wrapper animated bounceInLeft">
 		<div class="welcoming">
 			<h1 id="header"></h1>
+			<h1 id="team"></h1>
 		</div>
 		<div class="mainpart wait_event">
 			<p>
@@ -39,12 +40,27 @@ console.log(quest + "  ?????????????");
 
 var socket = io();
 var team;
+var team_c;
+var beacons_found = 0;
+var beacon;
+var data;
+var room = sessionStorage.getItem("room");
+var quest_num = 0;
+var questions;
+var beacon1 = false;
+var beacon2 = false;
+var beacon3 = false;
+
 
 socket.on('go_to_team', function(data){
 	console.log('go to team');
 	team = data.team;
 	socket.emit('join_room', {'room': team});
 	socket.emit('join_room', {'room': room});
+
+/*	beacon = team.substring(team.length - 1);
+	var team_c = team.substring(0, team.length - 5);
+	socket.emit('get_quest', {'room':room, 'team':team_c, 'beacon': beacon});*/
 });
 
 
@@ -56,10 +72,8 @@ socket.on('quest', function(data, num){
 	get_ready(data, num);
 });
 
-	var data;
-	var room;
-	var quest_num;
-function get_ready(result, num){
+
+/*function get_ready(result, num){
 
 	 data = JSON.parse(result);
 	 quest_num = JSON.stringify(num);
@@ -73,6 +87,22 @@ function get_ready(result, num){
 		$('#ans2').val(data.ans2);
 		$('#ans3').val(data.ans3);
 }
+*/
+
+function get_ready_2(){
+
+ 	
+ 	data = questions;
+	
+
+		$('#header').text('Question ' + (quest_num + 1) + ": " + data[quest_num].question);
+		$('#corans').val(data[quest_num].corans);
+		$('#ans1').val(data[quest_num].ans1);
+		$('#ans2').val(data[quest_num].ans2);
+		$('#ans3').val(data[quest_num].ans3);
+		quest_num++;
+}
+
 
 socket.on('game_over', function(data){
 	$('.wait_event').hide();
@@ -80,19 +110,70 @@ socket.on('game_over', function(data){
 })
 
 socket.on('game_started', function(data){
-	$('.wait_event').show();
-	if (quest === null){ 
+	//$('.wait_event').show();
+
+	beacon = team.substring(team.length - 1);
+	team_c = team.substring(0, team.length - 5);
+
+	if(beacon == 1){
+		beacon1 = true;
+		console.log( beacon1 + "  beacon true 1");
+	}else if(beacon == 2){
+		beacon2 = true;
+		console.log(beacon2 + "  beacon true 2");
+	}else{
+		beacon3 = true;
+		console.log( beacon3 + "  beacon true 3" );
+	}
+
+	$('#team').text("You Are In The " + team.substring(team.length - 5));
+
+	socket.emit('get_quest', {'room':room, 'team':team, 'beacon': beacon});
+
+	console.log("team   " + team_c + "  beacon " + beacon);
+
+
+
+/*	if (quest === null){ 
 			quest = 1;
 			socket.emit('start_game', {'quest_num': quest, 'team': team });
 			}else{
 			quest.toInt;
-			}
+			}*/
 });
 
 socket.on('game_won', function(data){
 	$('.wait_event').hide();
 	$('#header').text('Congratulations! You Won The Game!');
 })
+
+
+socket.on('quests_get', function(data){
+	var quests = JSON.parse(data);
+	questions = quests;
+
+	console.log(quests);
+
+	$('#header').text(quests[0].hint);
+////////////////////1111111111111111111111111111111111111111111111
+/*	if(beacon == 1){
+		beacon1 = true;
+		console.log( beacon1 + "  beacon true 1");
+	}else if(beacon == 2){
+		beacon2 = true;
+		console.log(beacon2 + "  beacon true 2");
+	}else{
+		beacon3 = true;
+		console.log( beacon3 + "  beacon true 3" );
+	}*/
+
+	console.log(quests[0].hint + "  asdasdasdasdasdasdasdasdasd   " + quests.length);
+
+	
+
+
+});
+
 
 
 // getting teams
@@ -117,16 +198,72 @@ $('#corans').click(function(event){
 	event.preventDefault();
 	event.stopPropagation();
 
-	socket.emit('next_quest', {'room': room, 'quest_num': quest_num, 'team': team});
+	if(quest_num < questions.length){
+	get_ready_2();
+	}else{
+
+		var bcn;
+		quest_num = 0;
+
+			if(beacons_found >= 3){
+
+				console.log("game is over ");
+				var winner_data = {
+									'game_id': room,
+									'winner_team': team.substring(team.length - 5)
+					}
+				socket.emit('end_game', winner_data);
+				console.log(winner_data);
+			}else{
+
+
+					console.log("beacon 1 flag " + beacon1 + " beacon 2 flag " + beacon2 + " beacon 3 flag " + beacon3);
+					$('.wait_event').hide();
+					if(beacon1 == false){
+						bcn = '1';
+						beacon1 = true;
+						console.log('beacon 11111111');
+					} else if(beacon2 == false){
+						bcn = '2';
+						beacon2 = true;
+						console.log('beacon 22222222222');
+					}else if (beacon3 == false){
+						bcn = '3';		
+						beacon3 = true;
+						console.log('beacon 33333333333');
+					} 
+
+					socket.emit('get_quest', {'room':room, 'team':team, 'beacon': bcn});
+
+						console.log("room   " + room + "team   " + team + "  beaconbbbbbbbbbb " + bcn);
+				}
+
+				//socket.emit('next_quest', {'room': room, 'quest_num': quest_num, 'team': team});
+				//socket.emit('get_quest', {'room':room, 'team':team, 'beacon': beacon});
+	}	
+
 });
 
 
-$('#leave').click(function(event){
-	console.log('leaving');
-	socket.emit('leave', {'room': 'qwe'});
+
+/* vazhnya hernya
+	if(beacons_found >= 3){
+		var winner_data = {
+							'game_id': room,
+							'winner_team': team
+			}
+		socket.emit('end_game', winner_data);
+	}*/
+
+
+socket.on('beacon_found', function(data){
+	beacons_found++;
+	console.log('beacon found!!!!!');
+	$('.wait_event').show();
+	//socket.emit('get_quest', {'room':room, 'team':team, 'beacon': beacon});
+	quest_num = 0;
+	get_ready_2();
 });
-
-
 
 
 

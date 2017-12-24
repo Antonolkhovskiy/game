@@ -47,13 +47,9 @@
 
 		
 	
-		var team1_quest = 1;
-		var team2_quest = 1;	
-		var team3_quest = 1;
-	
-	
-		socket.emit('show_players', {'game': username});
-	
+		var team1_quest = 0;
+		var team2_quest = 0;	
+		var team3_quest = 0;
 	
 	
 		socket.emit('join_room',{'room':username});
@@ -147,6 +143,7 @@
 						end_game('Team 1');
 						break;
 					}
+					break;
 	
 				}
 				case 'team2':{
@@ -161,6 +158,7 @@
 						end_game('Team 2');
 						break;
 					}
+					break;
 	
 				}
 				case 'team3':{
@@ -175,6 +173,7 @@
 						end_game('Team3');
 						break;
 					}
+					break;
 	
 				}
 			}

@@ -7,5 +7,6 @@ module.exports = mongoose.model('question',{
                     'ans1':String,
                     'ans2':String,
                     'ans3':String,
-                    'hint':String                   
+                    'hint':String,
+                    'beacon': String                   
 });

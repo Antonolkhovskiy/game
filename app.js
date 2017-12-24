@@ -22,8 +22,7 @@ mongoose.connect(config.MONGODB_URI);
 
 
 var question = require('./models/quest');
-var game = require('./models/game');
-var team = require('./models/team');
+var active_games = require('./models/active_games');
 
 var http = require('http');
 var app = express();
@@ -106,7 +105,7 @@ io.on('connection', function(socket){
 			var room = data.room;
             var team = data.team;
                 team.toString;
-                team = team.substring(team.length - 5);
+           var team_status = team.substring(team.length - 5);
 
 
 			var quest_num = parseInt(data.quest_num);
@@ -128,7 +127,7 @@ io.on('connection', function(socket){
                 socket.join(room);
                 socket.join(team);
                 io.to(team).emit('quest', data_to, quest_num);  
-                io.to(room).emit('team_status', {'team': team});              
+                io.to(room).emit('team_status', {'team': team_status});              
                 socket.emit('leave_miv', {'data':data});
                 console.log(JSON.stringify(socket.rooms));
                 
@@ -146,16 +145,70 @@ io.on('connection', function(socket){
 	});
 });
     
+
+    io.on('connection', function(socket){
+    socket.on('get_quest', function(data){
+        
+
+            var room = data.room;
+            var team = data.team;
+                team.toString;
+            var team_status = team.substring(team.length - 5);
+            var beacon = data.beacon;
+
+            question.find({'$and':[{'game_id': room}, {'beacon': beacon}]})
+            .then((data_get) =>{    
+                data_to = JSON.stringify(data_get);
+                JSON.parse(data_to);
+                console.log("++++++++++++++++++room " + room + "  team  " + team + "  beacon  "  + beacon + "++++++++++++++++++quest_get++++++++++++++++++++++++");
+                
+
+             
+                socket.join(room);
+                socket.join(team);
+                io.to(team).emit('quests_get', data_to);  
+               //io.to(room).emit('team_status', {'team': team_status});              
+                //socket.emit('leave_miv', {'data':data});
+                console.log(JSON.stringify(socket.rooms));
+                
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+
+            
+        
+
+        
+
+    });
+});
     io.on('connection', function(socket){
         socket.on('quest_count', function(data){
             game_id = data.game;
             game_id.toString;
             console.log('_________________quest count   -'+ game_id + '-   _____________');
 
-            question.find({'game_id': game_id}).count().then(function(res){
+            question.find({'game_id': game_id}).then(function(res){
+                var length1 = res.filter(value => value.beacon === "1").length;
+                var length2 = res.filter(value => value.beacon === "2").length;
+                var length3 = res.filter(value => value.beacon === "3").length;
+
+                console.log(length1 + "   " +  length2 + "  " + length3)
+
+                var quest_count = length1 + length2 + length3;
+
+                var can_start = false;
+
+                if(length1 >= 1 && length2 >= 1 && length3 >= 1){
+                    can_start = true;
+                }else{
+                    can_start = false;
+                }
                 socket.join(game_id);
-                io.to(game_id).emit('quest_comlete', {'quest_count': res});
-                console.log('____________quest comlete ' + res + '  _________________');
+                io.to(game_id).emit('quest_comlete', {'quest_count': quest_count}, {'can_start': can_start});
+                //console.log('____________quest comlete ' + res + '  _________________');
             });
 
         });
@@ -222,12 +275,87 @@ io.on('connection', function(socket){
         });
     });
 
+
+
+
     io.on('connection', function(socket){
-        socket.on('start_game', function(data){
+        socket.on('beacon_check', function(data){
+            var team = data.team;
+            var game = data.game;
+            var beacon = 'beacon' + data.beacon;
+            team.toString;
+            beacon.toString;
+
+            active_games.findOne({'game_id': game}).then(function(res){
+                console.log(res);
+                if(res == null){
+                    console.log('there is no such game');
+                    socket.emit('beacon_status', {'status': 'There is no such game!'});
+                }else{
+
+
+                    var check = res[team][0][beacon];
+
+                    check.toString;
+
+
+
+                    if(check == 'true'){
+                        console.log("beacon has been already found!\nFind Another Beacon");
+                        socket.emit('beacon_status', {'status': 'Beacon has been already found!\nFind Another Beacon!'});
+                    }else{
+
+                        var room = game + team;
+
+                        console.log(room + "    room go adfasdfadsfads");
+
+                        
+
+                        res[team][0][beacon] = "true";
+
+                        console.log(res[team][0][beacon]);
+
+                        res.save(function(err){ if(err){ console.log(err);}}).then(function(result, err){
+                            if (err){ console.log(err);}
+                            console.log("beacon updated  ---------->>>> ");
+                            socket.emit('beacon_status', {'status': 'Ok!'});
+
+                            socket.join(room);
+                            io.to(room).emit('beacon_found', {'beacon': data.beacon});
+                        });
+
+
+
+
+                    }
+                }
+            } );
 
 
         });
 
+    });
+
+    io.on('connection', function(socket){
+        socket.on('beacon_ins', function(data){
+
+            active_games.findOneAndRemove({'game_id': data.game}).then(function(result){
+                
+                        var game = {
+                            'game_id': data.game
+                        }
+                        var active_game = new active_games(game);
+                        active_game.save(function(err){
+                            if(err){
+                                console.log(err);
+                                return
+                            }else{
+                                console.log('active game saved------>>>>' + active_game);
+                            }
+                        });
+                
+            });
+        });
     });
 
 
@@ -282,46 +410,6 @@ io.on('connection', function(socket){
             io.to(main_room).emit('new_player', {'player_name': player_name, 'team': team});
         });
     });
-
-
-
-    io.on('connection', function(socket){
-        socket.on('show_players', function(data){
-                var game_id = data.game;
-                game_id.toString;
-                game.find({})
-                    .where({'game': game_id})
-                    .populate('player')
-                    .then((data_get) =>{    
-                        console.log(data_get + "'''''''''''''''''''''''''''''''''");
-                       
-
-                        var players_data = data_get[0].players;
-                        var massive = [];
-                        var temp;
-                        var players = [];
-
-                        for(var i = 0; i < players_data.length; i++){
-                            players.push(players_data[i].player_name);
-                        }
-
-
-                      
-                    console.log("----------------" + players + "----------------");
-                            //var players = data_get[0].players.player_name;
-                            console.log(players + '   players');
-                            socket.join(game_id);
-                            io.to(game_id).emit('get_players', players);
-                    })
-                    .catch((err) =>{
-                        console.log(err);
-                    });
-        });
-
-    });
-
-
-
 
 
 

@@ -36,7 +36,7 @@ var isAuthenticated = function (req, res, next) {
 module.exports = function (passport) {
 
     /* GET login page. */
-    router.get('/', function (req, res) {
+    router.get('/',  function (req, res) {
         // Display the Login page with any flash message, if any
        // console.log('index get /');
        res.render('index', {message: req.flash('message')});
@@ -132,100 +132,17 @@ module.exports = function (passport) {
     router.get('/leave', isAuthenticated, function(req, res){
         res.render('home');
     });
- /*  
-    router.get('/start_game', isAuthenticated, function(req, res){
-        
-       
-        var game_id_got;
-        var size;
 
-        if(req.user.username){
-
-            game_id_got = req.user.username;
-            game_id_got.toString();
-
-
-            question.find({})
-            .where('game_id', game_id_got)
-            .sort({'_id':-1})
-            .limit(1)
-            .exec()
-            .then((data_get) =>{
-               
-                console.log("--------------------------worked---------------------");
-                console.log(data_get);
-            res.render('gamepage', {
-            question: '1: ' + data_get[0].question,
-            corans: data_get[0].corans,
-            ans1: data_get[0].ans1,
-            ans2: data_get[0].ans2,
-            ans3: data_get[0].ans3,
-          hint: data_get[0].hint
-            });  
-
-            })
-            .catch((err) => {
-                console.log("adsfadsfasdfadsfdsfadsfasdfasfhklbasdjkvasdkfjvaskfvaskjfvaskdjf");
-                console.log(err);
-            });
-
-
-            
-        }else{
-            console.log('start game error');
-        }
-
-   });
-
-
-   router.post('/next_quest', function(req, res){
-
-        if(req.body.data){
-            var data = (req.body.data);
-            console.log("data " + data);
-            var game_id = data.game_id;
-            var quest_num = data.quest_num;
-            console.log("quest_num---->>> " + quest_num + " game_id---->>>> " + game_id);
-
-            question.find({})
-            .where('game_id', game_id)
-            .sort({'_id':-1})
-            .skip(quest_num)
-            .limit(1)
-            .exec()
-            .then((data_get) =>{
-               
-                console.log("--------------------------asdfasdfasdf---------------------");
-                console.log(data_get);
-                quest_num++;
-            res.render('gamepage', {
-            question: quest_num + ': ' + data_get[0].question,
-            corans: data_get[0].corans,
-            ans1: data_get[0].ans1,
-            ans2: data_get[0].ans2,
-            ans3: data_get[0].ans3,
-            hint: data_get[0].hint
-            });  
-
-            })
-            .catch((err) => {
-                console.log("adsfadsfasdfadsfdsfadsfasdfasfhklbasdjkvasdkfjvaskfvaskjfvaskdjf");
-                console.log(err);
-            });
- 
-
-        }else{
-            console.log("did not worked");
-        }
-
-
-
-
-
-
-
+    router.get('/beacon1', function(req, res){
+        res.render('beacon1');
     });
-*/
+ 
+     router.get('/beacon2', function(req, res){
+        res.render('beacon2');
+    });
 
+    router.get('/beacon3', function(req, res){
+        res.render('beacon3');
+    });
     return router;
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+		<%include stat%>
+</head>
+<body>
+
+	<h3>Please Enter Game Name</h3>
+	<input type="textarea" id="game">
+	<h3>Please Choose Your Team</h3>
+	<input type="textarea" id="team" placeholder="example: team1">
+	<input type="submit" id="check" value="Submit">
+	<h3 id="status"></h3>
+	<script>
+
+		socket = io();
+		$('#check').click(function(){
+			var game = $('#game').val();
+			game = game.toLowerCase();
+
+			var team = $('#team').val();
+
+			socket.emit('beacon_check', {'game': game, 'team': team, 'beacon':'2'});
+
+		});
+
+		socket.on('beacon_status', function(data){
+			$('#status').text(data.status);
+		});
+
+
+
+	</script>
+
+</body>
+</html>

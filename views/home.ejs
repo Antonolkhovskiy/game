@@ -48,6 +48,7 @@
 				//var room = $('#room').val();
 				var room = $('#username').text();
 				socket.emit('join_room', {'room': room, 'username': username});
+				socket.emit('beacon_ins', {'game': room});
 				username = $('#username').text();
 				sessionStorage.setItem('username', username);
 			});
