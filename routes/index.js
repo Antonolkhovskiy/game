@@ -133,15 +133,15 @@ module.exports = function (passport) {
         res.render('home');
     });
 
-    router.get('/beacon1', function(req, res){
+    router.get('/b1', function(req, res){
         res.render('beacon1');
     });
  
-     router.get('/beacon2', function(req, res){
+     router.get('/b2', function(req, res){
         res.render('beacon2');
     });
 
-    router.get('/beacon3', function(req, res){
+    router.get('/b3', function(req, res){
         res.render('beacon3');
     });
     return router;
