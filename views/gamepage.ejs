@@ -108,7 +108,7 @@ function get_ready_2(){
 
 socket.on('game_over', function(data){
 	$('.wait_event').hide();
-	$('#header').text('You Loosed The Game ' + data.winner_team + " Won");
+	$('#header').text('You Lose The Game ' + data.winner_team + " Won");
 })
 
 socket.on('game_started', function(data){
@@ -231,7 +231,8 @@ function punish(){
 $('#corans').click(function(event){
 	event.preventDefault();
 	event.stopPropagation();
-
+	$('.mainpart').hide();
+	$('.mainpart2').show();
 	socket.emit('quest_answered', {'team': team.substring(team.length - 5), 'room':room });
 
 	if(quest_num < questions.length){
