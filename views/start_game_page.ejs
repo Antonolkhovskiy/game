@@ -8,39 +8,48 @@
 
 		<% if (typeof username !== 'undefined' && username.length > 0) { %>
 			<!-- change the saying -->
+			<div class="startgamecontent">
 			  <h1 class="to_hide" id="head">
 				  Tell to the players name of the game 
 				  '<font id="username"><%= username %></font>' to connect
 			  </h1>
 		<% } %>
-		<ul id="list">
+		<div class="teamone">
+		<h3 class="team team_head" id="quest_status1"></h3>
+		<ul id="team1" class="team">TEAM 1
 		</ul>
-		<h3 class=team team_head" id="quest_status1"></h3>
-		<ul id="team1" class="team">Team 1
+		</div>
+		<div class="teamtwo">
+		<h3 class="team team_head" id="quest_status2"></h3>
+		<ul id="team2" class="team">TEAM 2
 		</ul>
-		<h3 class=team team_head" id="quest_status2"></h3>
-		<ul id="team2" class="team">Team 2
+		</div>
+		<div class="teamthree">
+		<h3 class="team team_head" id="quest_status3"></h3>	
+		<ul id="team3" class="team">TEAM 3
 		</ul>
-		<h3 class=team team_head" id="quest_status3"></h3>	
-		<ul id="team3" class="team">Team 3
-		</ul>
+	 </div>
 		<br>
 	
-	
-		<h3 id="player_count"></h3>
-		<input type="submit" id="game_start" value="Start Game">
-	
+		<h3 id="atleast">You need at least 3 players to start the game</h3>
+
+		<span id="countname"><h3 id="player_count"></h3></span>
+		<button id="game_start" class="btn btn-danger">Start Game</button>
+
 		<form action="/home">
-			<input type="submit" id="menu"  value="Menu">
+			<p>
+				<button id="menu">HomePage</button>
+			</p>
+			
 		</form>
 	
-	
+	</div>
 		<script>
 		var socket = io();
 		var player_count = 0;
 	
 		$('.team').hide();
-		$('#player_count').text('Connected players: ' + player_count + '   You need at least 3 players to start the game');
+		$('#player_count').text('Connected players: ' + player_count);
 		$('#game_start').hide();
 	
 		var username = $('#username').text();
@@ -194,7 +203,7 @@
 
 
 				player_count++;
-				$('#player_count').text('Connected players: ' + player_count + '   You need at least 3 players to start the game');
+				$('#player_count').text('Connected players: ' + player_count);
 				allow_start_game(player_count);
 				console.log('new_player\n total number of players: ' + player_count);
 				//$('.team').show();

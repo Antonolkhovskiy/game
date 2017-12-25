@@ -33,6 +33,7 @@ ul{
 
 .welcoming{
     background: #c9e6ff;
+    text-align: center;
 }
 
 .welcoming h1{
@@ -83,7 +84,70 @@ ul{
     text-transform: uppercase;
 }
 
-
+#countname{
+    color: red;
+}
+ 
+ /*Game Start Content*/
+ 
+ .startgamecontent{
+   background-color: #fff;
+   display: grid;
+   margin: auto;  
+   text-align: center;
+   padding: 50px;
+   grid-row-gap: 1em;
+ }
+ 
+ .startgamecontent form button, #game_start{
+     display: table;
+     margin: 0 auto;
+     border: 0;
+     text-transform: uppercase;
+     cursor: pointer;
+ }
+ 
+ .teamone{
+     background-color: lightblue;
+ }
+ 
+ .teamtwo{
+     background-color: lightsalmon;
+ }
+ 
+ .teamthree{
+     background-color: lightgreen;
+ }
+ 
+ .modalstuff{
+     display: table;
+     margin: 0 auto;
+     border: 0;
+     text-transform: uppercase;
+ }
+ 
+ .modal-body{
+    display: inline-block;
+     margin: 0 auto;
+     padding: 20px;
+ }
+ 
+ .forbeacon{
+     background-color: red;
+     border: 2px solid;
+ }
+  
+ .forbtns{
+     background: orange;
+     border: 2px solid;
+ }
+ 
+ #selectedbcn{
+     text-align: center;
+ }
+ .btnsgroup{
+     margin: 0 auto;
+ }
 
 /* LARGE SCREENS */
 

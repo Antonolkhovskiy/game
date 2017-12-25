@@ -18,10 +18,37 @@
 					<h1 id="status"></h1>
 				</div>
 					<div class="mainpart">
+							<div class="modalstuff">
+							<!-- Trigger the modal with a button -->
+							<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Select a Beacon to be adjusted</button>
+						  
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" role="dialog" data-backdrop="false">
+							  <div class="modal-dialog">
+						  
+								<!-- Modal content-->
+								<div class="modal-content">
+								  <div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Choose a Beacon</h4>
+								  </div>
+								  <div class="modal-body">
+									<button class="btn btn-success" id="beacon1">BEACON #1</button>
+									<button class="btn btn-success" id="beacon2">BEACON #2</button>
+									<button class="btn btn-success" id="beacon3">BEACON #3</button>
+								  </div>
+								  <div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								  </div>
+								</div>
+								
+							  </div>
+							</div>
+							
+					
+			 </div>
+			 <h2 id="selectedbcn"></h2>
 						 <form id="subquest">
-						 <h1>Beacon # </h1>
-						 <input type="textarea" id="beacon" placeholder="Type Number Of beacon">
-						 <br />
 						 <p>
 						 <label for="questionInput">Question:</label>
 						 <textarea class="form-control" id="question"></textarea>
@@ -67,10 +94,11 @@
 				</div>
 
 				<script>
-
+var beaconNum;
 var username = sessionStorage.getItem('username');
 var socket = io();
 $('.start_game').hide();
+$('#selectedbcn').hide();
 
 if(username != null){
 	socket.emit('quest_count', {'game': username});
@@ -115,6 +143,36 @@ function get_ready(){
 		   $('#ans3').val("");
 	 
 };
+
+//MODAL CLICK
+
+$('#beacon1').click(function(){
+		beaconNum = '1';
+		$(this).addClass('forbeacon');
+		$('#beacon2').removeClass('forbeacon');
+		$('#beacon3').removeClass('forbeacon');
+		$('#selectedbcn').show().text('Selected Beacon: 1');
+		
+	});
+
+	$('#beacon2').click(function(){
+		beaconNum = '2';
+		$(this).addClass('forbeacon');
+		$('#beacon1').removeClass('forbeacon');
+		$('#beacon3').removeClass('forbeacon');
+		$('#selectedbcn').show().text('Selected Beacon: 2');
+	});
+		
+
+	$('#beacon3').click(function(){
+		beaconNum = '3';
+		$(this).addClass('forbeacon');
+		$('#beacon1').removeClass('forbeacon');
+		$('#beacon2').removeClass('forbeacon');
+		$('#selectedbcn').show().text('Selected Beacon: 3');
+	});
+
+
 $('#subquest').submit(function(event){
    event.preventDefault();
    event.stopPropagation();
@@ -125,7 +183,6 @@ $('#subquest').submit(function(event){
    var ans2 = $('#ans2').val();
    var ans3 = $('#ans3').val();
    var hint = $('#hint').val();
-   var beacon = $('#beacon').val();
 
    $.ajax({
 	   type:"POST",
@@ -138,7 +195,7 @@ $('#subquest').submit(function(event){
 		   'ans2':ans2,
 		   'ans3':ans3,
 		   'hint':hint,
-		   'beacon':beacon
+		   'beacon':beaconNum
 		   }
 	   }),
 	   success: get_ready(),

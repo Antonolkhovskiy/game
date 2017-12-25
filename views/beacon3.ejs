@@ -1,36 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
+
+ <head>
 	<title></title>
 		<%include stat%>
 </head>
 <body>
+   <div class="container">
+		   <div class="wrapper animated bounceInLeft">
+				   <div class="welcoming">
+	   <h3>Please Enter Game Name</h3>
+	   <input type="textarea" id="game">
+	   <h3>Please Choose Your Team</h3>
+	   <div class="btnsgroup">
+		   <button class="btn btn-danger" id="btn1">TEAM 1</button>
+		   <button class="btn btn-danger" id="btn2">TEAM 2</button>
+		   <button class="btn btn-danger" id="btn3">TEAM 3</button>
+	   </div>
+	   <br />
+	   <button class="btn btn-success" id="check">GET THE QUESTIONS</button>
+	   <h3 id="status"></h3>
+		   </div>
+	   </div>
+   </div>
+   <script>
 
-	<h3>Please Enter Game Name</h3>
-	<input type="textarea" id="game">
-	<h3>Please Choose Your Team</h3>
-	<input type="textarea" id="team" placeholder="example: team1">
-	<input type="submit" id="check" value="Submit">
-	<h3 id="status"></h3>	
-	<script>
+	   var team;
+
+	   $('#btn1').click(function(){
+		   team = 'team1';
+		   $(this).addClass('forbtns');
+		   $('#btn2').removeClass('forbtns');
+		   $('#btn3').removeClass('forbtns');
+	   });
+
+
+	   $('#btn2').click(function(){
+		   team = 'team2';
+		   $(this).addClass('forbtns');
+		   $('#btn1').removeClass('forbtns');
+		   $('#btn3').removeClass('forbtns');
+	   });
+
+
+	   $('#btn3').click(function(){
+		   team = 'team3';
+		   $(this).addClass('forbtns');
+	   $('#btn1').removeClass('forbtns');
+		   $('#btn2').removeClass('forbtns');
+	   });
 
 		socket = io();
 		$('#check').click(function(){
 			var game = $('#game').val();
 			game = game.toLowerCase();
 
-			var team = $('#team').val();
+   
 
 			socket.emit('beacon_check', {'game': game, 'team': team, 'beacon':'3'});
+   
 
 		});
 
-				socket.on('beacon_status', function(data){
-			$('#status').text(data.status);
+		socket.on('beacon_status', function(data){
+			$('#status').text(data.status);			
+			var bcnStatus = data.status.toString();
+	   if(bcnStatus == 'ok'){
+			   alert("Now Close This Tab To Continue The Game");
+		   }
 		});
 
-
-		
+			
 
 	</script>
 
