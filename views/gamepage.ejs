@@ -50,6 +50,8 @@ var questions;
 var beacon1 = false;
 var beacon2 = false;
 var beacon3 = false;
+var cause_player;
+var flag = false;
 
 
 socket.on('go_to_team', function(data){
@@ -111,6 +113,7 @@ socket.on('game_over', function(data){
 
 socket.on('game_started', function(data){
 	//$('.wait_event').show();
+	flag = true;
 
 	beacon = team.substring(team.length - 1);
 	team_c = team.substring(0, team.length - 5);
@@ -190,13 +193,46 @@ socket.emit('get_team', data_to_join);
 
 
 $('.ans').click(function() {
-	alert("Wrong! Try Again!");
+	//alert("Wrong! Try Again!");
+	console.log('wrong ans!!!!');
+
+	socket.emit('wrong_ans', {'room':team.substring(team.length - 5), 'player':player});
 	
 });
+var timer;
+socket.on('punishment',function(data){
+	console.log(data);
+	cause_player = data.player;
+	cause_player.toString();
+	$('.wait_event').hide();
+	$('#team').hide();
+	$('#header').text(cause_player + " answered wrong. You have to wait 10 seconds(if you try to reload the page, you will be kicked out of the game)");
+
+  	timer = setInterval(punish,1000);
+});
+var punish_time = 10;
+function punish(){
+	punish_time--;
+	if(punish_time > 0){
+		$('#header').text(cause_player + " answered wrong. You have to wait " + punish_time + " seconds(if you try to reload the page, you will be kicked out of the game)");
+	}else{
+		punish_time = 10;
+		clearInterval(timer);
+		$('.wait_event').show();
+		$('#team').show();
+		quest_num--;
+		get_ready_2();
+
+	}
+}
+
+
 
 $('#corans').click(function(event){
 	event.preventDefault();
 	event.stopPropagation();
+
+	socket.emit('quest_answered', {'team': team.substring(team.length - 5), 'room':room });
 
 	if(quest_num < questions.length){
 	get_ready_2();
@@ -257,12 +293,14 @@ $('#corans').click(function(event){
 
 
 socket.on('beacon_found', function(data){
-	beacons_found++;
-	console.log('beacon found!!!!!');
-	$('.wait_event').show();
-	//socket.emit('get_quest', {'room':room, 'team':team, 'beacon': beacon});
-	quest_num = 0;
-	get_ready_2();
+	if(flag){
+		beacons_found++;
+		console.log('beacon found!!!!!');
+		$('.wait_event').show();
+		//socket.emit('get_quest', {'room':room, 'team':team, 'beacon': beacon});
+		quest_num = 0;
+		get_ready_2();
+		}
 });
 
 

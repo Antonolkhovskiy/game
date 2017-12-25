@@ -98,7 +98,7 @@ io.on('connection', function(socket){
 	});
 });
 
-io.on('connection', function(socket){
+/*io.on('connection', function(socket){
 	socket.on('next_quest', function(data){
 		
 
@@ -140,11 +140,34 @@ io.on('connection', function(socket){
             
         
 
-		
+		https://goo.gl/fCua8i
 
 	});
 });
-    
+    */
+
+    io.on('connection', function(socket){
+        socket.on('wrong_ans', function(data){
+
+            console.log(data);
+
+            var player = data.player;
+            var room = data.room;
+
+            socket.join(room);
+            io.to(room).emit('punishment', {'player': player});
+        })
+    })
+
+    io.on('connection', function(socket){
+        socket.on('quest_answered', function(data){
+            console.log(' quest ansered '  + data);
+            var room = data.room;
+            var team = data.team;
+            socket.join(room);
+            io.to(room).emit('team_status', {'team': team});
+        });
+    });
 
     io.on('connection', function(socket){
     socket.on('get_quest', function(data){
@@ -160,7 +183,7 @@ io.on('connection', function(socket){
             .then((data_get) =>{    
                 data_to = JSON.stringify(data_get);
                 JSON.parse(data_to);
-                console.log("++++++++++++++++++room " + room + "  team  " + team + "  beacon  "  + beacon + "++++++++++++++++++quest_get++++++++++++++++++++++++");
+                //console.log("++++++++++++++++++room " + room + "  team  " + team + "  beacon  "  + beacon + "++++++++++++++++++quest_get++++++++++++++++++++++++");
                 
 
              
@@ -188,14 +211,15 @@ io.on('connection', function(socket){
         socket.on('quest_count', function(data){
             game_id = data.game;
             game_id.toString;
-            console.log('_________________quest count   -'+ game_id + '-   _____________');
+            //console.log('_________________quest count   -'+ game_id + '-   _____________');
 
             question.find({'game_id': game_id}).then(function(res){
+                //console.log(res);
                 var length1 = res.filter(value => value.beacon === "1").length;
                 var length2 = res.filter(value => value.beacon === "2").length;
                 var length3 = res.filter(value => value.beacon === "3").length;
 
-                console.log(length1 + "   " +  length2 + "  " + length3)
+                //console.log(length1 + "   " +  length2 + "  " + length3)
 
                 var quest_count = length1 + length2 + length3;
 
@@ -240,6 +264,8 @@ io.on('connection', function(socket){
                     socket.join(room_won_game);
                     socket.join(room_team1);
                     socket.join(room_team2);
+                    socket.join(game_id);
+                    io.to(game_id).emit('stop_game', {'winner_team':'team1'})
                     io.to(room_team1).emit('game_over', {'winner_team': 'team1'});
                     io.to(room_team2).emit('game_over', {'winner_team': 'team1'});
                     io.to(room_won_game).emit('game_won', {});
@@ -253,6 +279,8 @@ io.on('connection', function(socket){
                     socket.join(room_won_game);
                     socket.join(room_team1);
                     socket.join(room_team2);
+                    socket.join(game_id);
+                    io.to(game_id).emit('stop_game', {'winner_team':'team2'})
                     io.to(room_team1).emit('game_over', {'winner_team': 'team2'});
                     io.to(room_team2).emit('game_over', {'winner_team': 'team2'});
                     io.to(room_won_game).emit('game_won', {});
@@ -266,6 +294,8 @@ io.on('connection', function(socket){
                     socket.join(room_won_game);
                     socket.join(room_team1);
                     socket.join(room_team2);
+                    socket.join(game_id);
+                    io.to(game_id).emit('stop_game', {'winner_team':'team2'})
                     io.to(room_team1).emit('game_over', {'winner_team': 'team3'});
                     io.to(room_team2).emit('game_over', {'winner_team': 'team3'});
                     io.to(room_won_game).emit('game_won', {});
@@ -287,7 +317,7 @@ io.on('connection', function(socket){
             beacon.toString;
 
             active_games.findOne({'game_id': game}).then(function(res){
-                console.log(res);
+                //console.log(res);
                 if(res == null){
                     console.log('there is no such game');
                     socket.emit('beacon_status', {'status': 'There is no such game!'});
@@ -318,7 +348,7 @@ io.on('connection', function(socket){
                         res.save(function(err){ if(err){ console.log(err);}}).then(function(result, err){
                             if (err){ console.log(err);}
                             console.log("beacon updated  ---------->>>> ");
-                            socket.emit('beacon_status', {'status': 'Ok!'});
+                            socket.emit('beacon_status', {'status': 'ok'});
 
                             socket.join(room);
                             io.to(room).emit('beacon_found', {'beacon': data.beacon});
@@ -340,7 +370,7 @@ io.on('connection', function(socket){
         socket.on('beacon_ins', function(data){
 
             active_games.findOneAndRemove({'game_id': data.game}).then(function(result){
-                
+
                         var game = {
                             'game_id': data.game
                         }
